@@ -85,13 +85,12 @@ def check_if_table_exists(family: str, table: str) -> bool:
     """Checks whether the specified table exists in the nftables ruleset"""
     nft_ruleset = get_existing_nftables_ruleset()
     for entry in nft_ruleset["nftables"]:
-        if (
-            isinstance(entry, dict)
-            and "table" in entry
-            and entry["family"] == family
-            and entry["name"] == table
-        ):
-            return True
+        if isinstance(entry, dict) and "table" in entry:
+            if (entry.get("family") == family and entry.get("name") == table) or (
+                # NFTables v1.0.5 has the fields nested inside entry["table"]
+                entry["table"]["family"] == family and entry["table"]["name"] == table
+            ):
+                return True
     return False
 
 
