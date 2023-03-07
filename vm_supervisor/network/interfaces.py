@@ -29,10 +29,10 @@ class TapInterface:
     async def create(self):
         logger.debug("Create network interface")
 
-        run(["/usr/bin/ip", "tuntap", "add", self.device_name, "mode", "tap"])
+        run(["ip", "tuntap", "add", self.device_name, "mode", "tap"])
         run(
             [
-                "/usr/bin/ip",
+                "ip",
                 "addr",
                 "add",
                 str(self.host_ip.with_prefixlen),
@@ -40,7 +40,7 @@ class TapInterface:
                 self.device_name,
             ]
         )
-        run(["/usr/bin/ip", "link", "set", self.device_name, "up"])
+        run(["ip", "link", "set", self.device_name, "up"])
         logger.debug(f"Network interface created: {self.device_name}")
 
     async def delete(self) -> None:
